@@ -43,14 +43,14 @@ def read_todos(session: SessionDep):
     return todos
 
 @app.get("/todos/{todo_id}")
-def read_todo(todo_id: str, session: SessionDep):
+def read_todo(todo_id: uuid.UUID, session: SessionDep):
     todo = session.get(Todo, todo_id)
     if not todo:
         raise HTTPException(status_code=404, detail="Todo not found")
     return todo
 
 @app.delete("/todos/{todo_id}")
-def delete_todo(todo_id: str, session: SessionDep):
+def delete_todo(todo_id: uuid.UUID, session: SessionDep):
     todo = session.get(Todo, todo_id)
     if not todo:
         raise HTTPException(status_code=404, detail="Todo not found")
@@ -59,7 +59,7 @@ def delete_todo(todo_id: str, session: SessionDep):
     return {"ok": True}
 
 @app.put("/todos/{todo_id}")
-def update_todo(todo_id: str, updated_todo: Todo, session: SessionDep):
+def update_todo(todo_id: uuid.UUID, updated_todo: Todo, session: SessionDep):
     todo = session.get(Todo, todo_id)
     if not todo:
         raise HTTPException(status_code=404, detail="Todo not found")
