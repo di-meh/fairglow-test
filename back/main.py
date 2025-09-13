@@ -1,10 +1,24 @@
 from typing import Annotated, Union
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import os
 import uuid
 
+origins = [
+    "http://localhost",
+    "http://0.0.0.0"
+]
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class Todo(SQLModel , table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
@@ -48,6 +62,16 @@ def read_todo(todo_id: uuid.UUID, session: SessionDep):
     if not todo:
         raise HTTPException(status_code=404, detail="Todo not found")
     return todo
+
+@app.delete("/todos/completed")
+def delete_completed_todos(session: SessionDep):
+    completed_todos = session.exec(select(Todo).where(Todo.done == True)).all()
+    if not completed_todos:
+        return {"deleted_count": 0}
+    for todo in completed_todos:
+        session.delete(todo)
+    session.commit()
+    return {"deleted_count": len(completed_todos)}
 
 @app.delete("/todos/{todo_id}")
 def delete_todo(todo_id: uuid.UUID, session: SessionDep):
