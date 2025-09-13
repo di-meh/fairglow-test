@@ -1,0 +1,25 @@
+meta {
+  name: Put Todos by Id
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{back_api}}/todos/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 068e2322-b4b3-4b90-90d5-68fc0e5b5e42
+}
+
+body:json {
+  {
+    "done": true
+  }
+}
+
+settings {
+  encodeUrl: true
+}

@@ -37,6 +37,10 @@ services:
       - "8000:80"
     depends_on:
       - db
+    volumes:
+      - ./back:/back
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER?Variable not set}:${POSTGRES_PASSWORD?Variable not set}@db:5432/${POSTGRES_DB?Variable not set}
   
   front:
     build: 
@@ -49,5 +53,8 @@ services:
       - "80:5173"
     depends_on:
       - back
+    volumes:
+      - ./front:/app
+      - /app/node_modules
 volumes:
   app-db-data:

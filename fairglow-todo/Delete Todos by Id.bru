@@ -1,0 +1,19 @@
+meta {
+  name: Delete Todos by Id
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{back_api}}/todos/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
+
+settings {
+  encodeUrl: true
+}

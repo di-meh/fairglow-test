@@ -1,0 +1,22 @@
+meta {
+  name: Add Todo
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{back_api}}/todos
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": "test todo",
+    "done": true
+  }
+}
+
+settings {
+  encodeUrl: true
+}
